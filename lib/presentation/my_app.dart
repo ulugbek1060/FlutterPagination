@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pagination_app/presentation/detail_scree.dart';
 import 'package:pagination_app/presentation/paging_bloc_screen.dart';
 import 'package:pagination_app/presentation/posts_paging_screen.dart';
 
@@ -13,7 +14,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PostPagingScreen(),
+      home: const BlogPagingScreen(),
+      routes: {
+        DetailScreen.routeName: (_) => const DetailScreen(),
+      },
     );
   }
 }

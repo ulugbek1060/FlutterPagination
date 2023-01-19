@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pagination_app/models/post.dart';
+import 'package:pagination_app/presentation/paging_state.dart';
 import 'package:pagination_app/repository/posts_repository.dart';
 
-class PageCubit extends Cubit<PagingState> {
+class Paging extends Cubit<PagingState> {
   final PostsRepository repository;
   final int limit;
-  PageCubit({
+  Paging({
     required this.repository,
     required this.limit,
   }) : super(const PagingLoad.initialState()) {
@@ -40,35 +40,4 @@ class PageCubit extends Cubit<PagingState> {
       }
     }
   }
-}
-
-@immutable
-abstract class PagingState {
-  const PagingState();
-}
-
-class PagingLoad extends PagingState {
-  final int page;
-  final List<Post> posts;
-  final bool isLoading;
-  final bool reachedEnd;
-  const PagingLoad({
-    required this.page,
-    required this.posts,
-    required this.isLoading,
-    required this.reachedEnd,
-  });
-
-  const PagingLoad.initialState()
-      : page = 1,
-        posts = const [],
-        isLoading = false,
-        reachedEnd = false;
-}
-
-class PagingFail extends PagingState {
-  final Object? error;
-  const PagingFail({
-    required this.error,
-  });
 }
