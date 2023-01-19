@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pagination_app/presentation/paging_bloc.dart';
+import 'package:pagination_app/presentation/detail_scree.dart';
+import 'package:pagination_app/presentation/paging_cubit.dart';
+import 'package:pagination_app/presentation/paging_state.dart';
 import 'package:pagination_app/repository/posts_repository.dart';
 import 'package:pagination_app/sources/posts_source.dart';
 
@@ -14,13 +16,13 @@ class BlogPagingScreen extends StatelessWidget {
         title: const Text('List'),
       ),
       body: BlocProvider(
-        create: (_) => PageCubit(
+        create: (_) => Paging(
           repository: PostsRepository(
             postsSource: PostsSource(),
           ),
           limit: 20,
         ),
-        child: BlocConsumer<PageCubit, PagingState>(
+        child: BlocConsumer<Paging, PagingState>(
           listener: (context, state) {},
           builder: (context, state) {
             final currentState = state;
@@ -30,18 +32,25 @@ class BlogPagingScreen extends StatelessWidget {
                 onNotification: (ScrollNotification notification) {
                   if (notification.metrics.atEdge) {
                     if (notification.metrics.pixels != 0) {
-                      context.read<PageCubit>().loadPage();
+                      context.read<Paging>().loadPage();
                     }
                   }
                   return true;
                 },
                 child: ListView.builder(
-                  controller: ScrollController(),
                   itemCount: currentState.posts.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(posts[index].title),
-                      subtitle: Text(posts[index].body),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          DetailScreen.routeName,
+                          arguments: posts[index],
+                        );
+                      },
+                      child: ListTile(
+                        title: Text(posts[index].title),
+                        subtitle: Text(posts[index].body),
+                      ),
                     );
                   },
                 ),
